@@ -1,27 +1,75 @@
-body {
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     font-family: Arial, sans-serif;
     background: #f2f2f2;
 }
 
-aside {
-    float: left;
-    width: 200px;
-    background: #ccc;
-    height: 100vh;
-    padding: 20px;
+.layout-container {
+    display: flex;
+    min-height: 100vh;
 }
 
+.menu-toggle {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    background: #ccc;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 999;
+}
+
+/* MENU LATERAL */
+.nav-menu {
+    width: 200px;
+    background: #ccc;
+    padding: 20px;
+    flex-shrink: 0;
+}
+
+    .nav-menu ul {
+        list-style: none;
+    }
+
+    .nav-menu li {
+        margin-bottom: 10px;
+    }
+
+    .nav-menu a {
+        text-decoration: none;
+        color: #000;
+    }
+
+    .nav-menu.open {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 200px;
+        overflow-y: auto;
+        transition: all 0.3s ease;
+        z-index: 998;
+    }
+
 .content {
-    margin-left: 220px;
+    flex: 1;
     padding: 20px;
 }
 
 .board {
     display: grid;
-    grid-template-columns: repeat(3,80px);
-    grid-template-rows: repeat(3,80px);
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(3, 80px);
     gap: 5px;
+    margin-top: 20px;
 }
 
     .board button {
@@ -29,18 +77,30 @@ aside {
         height: 80px;
         font-size: 24px;
         cursor: pointer;
+        border: 1px solid #ccc;
+        background: #fff;
+        border-radius: 4px;
     }
 
 .lobby-games {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin-top: 20px;
+}
+
+.back-button {
+    margin-top: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .lobby-game {
     background: #fff;
     padding: 10px;
     border-radius: 5px;
+    border: 1px solid #ddd;
 }
 
     .lobby-game button {
@@ -69,9 +129,11 @@ aside {
 .ranking-table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
 
-    .ranking-table th, .ranking-table td {
+    .ranking-table th,
+    .ranking-table td {
         border: 1px solid #ddd;
         padding: 8px;
     }
@@ -79,3 +141,28 @@ aside {
     .ranking-table th {
         background: #eee;
     }
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        left: -220px;
+        height: 100%;
+        width: 200px;
+        transition: left 0.3s ease;
+        overflow-y: auto;
+        z-index: 998;
+    }
+
+        .nav-menu.open {
+            left: 0;
+        }
+
+    .content {
+        padding: 10px;
+    }
+}

@@ -3,50 +3,65 @@
 @implements IDisposable
 @inject NavigationManager Nav
 @inject GameService Service
+
+<div>
+    <h2>Lobby</h2>
+    <button @onclick="CriarJogo">Criar Jogo</button>
+    <button @onclick="CriarJogoVsIA">Criar Jogo vs IA</button>
+    <button @onclick="AbrirRanking">Ranking</button>
+
+    <div class="lobby-games">
+        @foreach (var g in openGames)
+        {
+            <div class="lobby-game">
+                <div><strong>ID:</strong> @g.Id</div>
+                <button @onclick="@(() => EntrarJogo(g.Id))">Entrar</button>
+            </div>
+        }
+    </div>
+</div>
+
 @code {
     [Parameter] public string UserName { get; set; }
     System.Collections.Generic.IEnumerable<GameEntity> openGames;
-    string usuario;
+
     protected override void OnInitialized()
     {
-        usuario = UserName;
         openGames = Service.GetOpenGames().ToList();
         Service.StateChanged += OnServiceStateChanged;
     }
+
     void OnServiceStateChanged()
     {
         openGames = Service.GetOpenGames().ToList();
         InvokeAsync(StateHasChanged);
     }
+
     void CriarJogo()
     {
-        var g = Service.CreateGame(usuario, false);
-        Nav.NavigateTo($"/game/{g.Id}/{usuario}");
+        var g = Service.CreateGame(UserName, false);
+        Nav.NavigateTo($"/game/{g.Id}/{UserName}");
     }
+
     void CriarJogoVsIA()
     {
-        var g = Service.CreateGame(usuario, true);
-        Nav.NavigateTo($"/game/{g.Id}/{usuario}");
+        var g = Service.CreateGame(UserName, true);
+        Nav.NavigateTo($"/game/{g.Id}/{UserName}");
     }
+
     void EntrarJogo(string id)
     {
-        Service.JoinGame(id, usuario);
-        Nav.NavigateTo($"/game/{id}/{usuario}");
+        Service.JoinGame(id, UserName);
+        Nav.NavigateTo($"/game/{id}/{UserName}");
     }
+
+    void AbrirRanking()
+    {
+        Nav.NavigateTo($"/ranking/{UserName}");
+    }
+
     public void Dispose()
     {
         Service.StateChanged -= OnServiceStateChanged;
     }
 }
-<h2>Lobby</h2>
-<button @onclick="CriarJogo">Criar Jogo</button>
-<button @onclick="CriarJogoVsIA">Criar Jogo vs IA</button>
-<div class="lobby-games">
-    @foreach (var g in openGames)
-    {
-        <div class="lobby-game">
-            <div>ID: @g.Id</div>
-            <button @onclick="@(()=>EntrarJogo(g.Id))">Entrar</button>
-        </div>
-    }
-</div>

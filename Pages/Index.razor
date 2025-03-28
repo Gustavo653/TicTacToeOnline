@@ -2,18 +2,23 @@
 @using TicTacToe.Data
 @inject NavigationManager Nav
 @inject GameService Service
+
 @code {
     string userName = "";
     string error = "";
+
     void Login()
     {
         if (!string.IsNullOrWhiteSpace(userName))
         {
-            if (Service.RegisterPlayer(userName)) Nav.NavigateTo($"/lobby/{userName}");
-            else error = "Nome já existe";
+            if (Service.RegisterPlayer(userName))
+                Nav.NavigateTo($"/lobby/{userName}");
+            else
+                error = "Nome já existe";
         }
     }
 }
+
 <div class="login-container">
     <h1>TicTacToe</h1>
     <input placeholder="Seu nome" @bind="userName" />

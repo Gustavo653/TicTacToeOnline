@@ -1,14 +1,10 @@
-﻿@page "/ranking"
+﻿@page "/ranking/{UserName}"
 @using TicTacToe.Data
 @inject GameService Service
-@code {
-    System.Collections.Generic.IEnumerable<Player> players;
-    protected override void OnInitialized()
-    {
-        players = Service.GetAllPlayers().OrderBy(p => p.BestWinTime).ThenByDescending(p => p.ConsecutiveWins).ToList();
-    }
-}
+@inject NavigationManager Nav
+
 <h2>Ranking</h2>
+
 <table class="ranking-table">
     <thead>
         <tr>
@@ -30,3 +26,23 @@
         }
     </tbody>
 </table>
+
+<button class="back-button" @onclick="Voltar">Voltar</button>
+
+@code {
+    [Parameter] public string UserName { get; set; }
+    System.Collections.Generic.IEnumerable<Player> players;
+
+    protected override void OnInitialized()
+    {
+        players = Service.GetAllPlayers()
+            .OrderBy(p => p.BestWinTime)
+            .ThenByDescending(p => p.ConsecutiveWins)
+            .ToList();
+    }
+
+    void Voltar()
+    {
+        Nav.NavigateTo($"/lobby/{UserName}");
+    }
+}
