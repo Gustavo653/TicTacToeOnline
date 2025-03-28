@@ -1,0 +1,32 @@
+﻿@page "/ranking"
+@using TicTacToe.Data
+@inject GameService Service
+@code {
+    System.Collections.Generic.IEnumerable<Player> players;
+    protected override void OnInitialized()
+    {
+        players = Service.GetAllPlayers().OrderBy(p => p.BestWinTime).ThenByDescending(p => p.ConsecutiveWins).ToList();
+    }
+}
+<h2>Ranking</h2>
+<table class="ranking-table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Menor Tempo de Vitória (s)</th>
+            <th>Vitórias em Sequência</th>
+            <th>Total de Vitórias</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in players)
+        {
+            <tr>
+                <td>@p.Name</td>
+                <td>@(p.BestWinTime == long.MaxValue ? "-" : p.BestWinTime)</td>
+                <td>@p.ConsecutiveWins</td>
+                <td>@p.TotalWins</td>
+            </tr>
+        }
+    </tbody>
+</table>

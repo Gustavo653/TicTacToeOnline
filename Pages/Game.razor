@@ -1,0 +1,58 @@
+﻿@page "/game/{GameId}/{UserName}"
+@implements IDisposable
+@inject GameService Service
+@using TicTacToe.Data
+@code {
+    [Parameter] public string GameId { get; set; }
+    [Parameter] public string UserName { get; set; }
+    GameEntity currentGame;
+    string usuario;
+    protected override void OnInitialized()
+    {
+        currentGame = Service.GetGame(GameId);
+        usuario = UserName;
+        Service.StateChanged += OnServiceStateChanged;
+    }
+    void OnServiceStateChanged()
+    {
+        currentGame = Service.GetGame(GameId);
+        InvokeAsync(StateHasChanged);
+    }
+    void Move(int i)
+    {
+        Service.MakeMove(GameId, i, usuario);
+    }
+    bool MyTurn()
+    {
+        if (currentGame == null || currentGame.IsFinished) return false;
+        if (currentGame.CurrentTurn == 'X' && currentGame.PlayerX == usuario) return true;
+        if (currentGame.CurrentTurn == 'O' && currentGame.PlayerO == usuario) return true;
+        return false;
+    }
+    bool SpotDisabled(int i)
+    {
+        if (currentGame == null) return true;
+        if (currentGame.Board[i] != ' ') return true;
+        if (!MyTurn()) return true;
+        return false;
+    }
+    public void Dispose()
+    {
+        Service.StateChanged -= OnServiceStateChanged;
+    }
+}
+<h3>Jogo @GameId</h3>
+@if (currentGame != null)
+{
+    <div class="board">
+        @for (int index = 0; index < 9; index++)
+        {
+            var localIndex = index;
+            <button disabled="@SpotDisabled(localIndex)" @onclick="@(() => Move(localIndex))">@currentGame.Board[localIndex]</button>
+        }
+    </div>
+    @if (currentGame.IsFinished)
+    {
+        <p>@(string.IsNullOrWhiteSpace(currentGame.Winner) ? "Empate" : "Vencedor: " + currentGame.Winner)</p>
+    }
+}

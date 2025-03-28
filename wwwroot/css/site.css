@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+}
+
+aside {
+    float: left;
+    width: 200px;
+    background: #ccc;
+    height: 100vh;
+    padding: 20px;
+}
+
+.content {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3,80px);
+    grid-template-rows: repeat(3,80px);
+    gap: 5px;
+}
+
+    .board button {
+        width: 80px;
+        height: 80px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+.lobby-games {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.lobby-game {
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+    .lobby-game button {
+        margin-left: 10px;
+    }
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+    .login-container input {
+        padding: 10px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        width: 200px;
+    }
+
+    .login-container button {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+.ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .ranking-table th, .ranking-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    .ranking-table th {
+        background: #eee;
+    }
