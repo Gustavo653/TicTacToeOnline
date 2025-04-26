@@ -1,26 +1,28 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
+@inject NavigationManager Nav
 
 <div class="@CssClass">
     <ul>
         <li>
-            <NavLink href="/" Match="NavLinkMatch.All">
-                Login
-            </NavLink>
+            <NavLink href="/" Match="NavLinkMatch.All">Login</NavLink>
         </li>
         <li>
-            <NavLink href="/lobby">
-                Lobby
-            </NavLink>
+            <NavLink href="/lobby">Lobby</NavLink>
         </li>
         <li>
-            <NavLink href="/ranking">
-                Ranking
-            </NavLink>
+            <NavLink href="/ranking">Ranking</NavLink>
+        </li>
+        <li>
+            <button @onclick="Logout">Sair</button>
         </li>
     </ul>
 </div>
 
 @code {
-    [Parameter]
-    public string CssClass { get; set; } = "nav-menu";
+    [Parameter] public string CssClass { get; set; } = "nav-menu";
+
+    void Logout()
+    {
+        Nav.NavigateTo("/");
+    }
 }

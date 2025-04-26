@@ -9,6 +9,7 @@
     <button @onclick="CriarJogo">Criar Jogo</button>
     <button @onclick="CriarJogoVsIA">Criar Jogo vs IA</button>
     <button @onclick="AbrirRanking">Ranking</button>
+    <button @onclick="Sair">Sair</button>
 
     <div class="lobby-games">
         @foreach (var g in openGames)
@@ -58,6 +59,11 @@
     void AbrirRanking()
     {
         Nav.NavigateTo($"/ranking/{UserName}");
+    }
+
+    void Sair()
+    {
+        Nav.NavigateTo($"");
     }
 
     public void Dispose()
