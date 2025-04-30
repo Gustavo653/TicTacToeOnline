@@ -3,45 +3,113 @@
 @inject GameService Service
 @inject NavigationManager Nav
 
-<h2>Ranking</h2>
+<h2 class="ranking-header">Ranking de Jogadores</h2>
 
-<table class="ranking-table">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Menor Tempo de Vitória (s)</th>
-            <th>Vitórias em Sequência</th>
-            <th>Total de Vitórias</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var p in players)
-        {
+<div class="ranking-actions">
+    <input type="text"
+           placeholder="🔍 Buscar jogador..."
+           @bind="searchTerm"
+           class="search-input" />
+</div>
+
+<div class="ranking-table-container card">
+    <table class="ranking-table">
+        <thead>
             <tr>
-                <td>@p.Name</td>
-                <td>@(p.BestWinTime == long.MaxValue ? "-" : p.BestWinTime)</td>
-                <td>@p.ConsecutiveWins</td>
-                <td>@p.TotalWins</td>
+                <th @onclick="() => SortBy(nameof(Player.Name))" class="sortable">
+                    Nome @SortIndicator(nameof(Player.Name))
+                </th>
+                <th @onclick="() => SortBy(nameof(Player.BestWinTime))" class="sortable">
+                    Menor Tempo (s) @SortIndicator(nameof(Player.BestWinTime))
+                </th>
+                <th @onclick="() => SortBy(nameof(Player.ConsecutiveWins))" class="sortable">
+                    Vitórias em Sequência @SortIndicator(nameof(Player.ConsecutiveWins))
+                </th>
+                <th @onclick="() => SortBy(nameof(Player.TotalWins))" class="sortable">
+                    Total Vitórias @SortIndicator(nameof(Player.TotalWins))
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var p in DisplayedPlayers)
+            {
+                <tr>
+                    <td>@p.Name</td>
+                    <td>@(p.BestWinTime == long.MaxValue ? "-" : p.BestWinTime.ToString())</td>
+                    <td>@p.ConsecutiveWins</td>
+                    <td>@p.TotalWins</td>
+                </tr>
+            }
+            @if (!DisplayedPlayers.Any())
+            {
+                <tr>
+                    <td colspan="4">Nenhum jogador encontrado.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
-<button class="back-button" @onclick="Voltar">Voltar</button>
+<button class="back-button" @onclick="Voltar">⬅️ Voltar</button>
 
 @code {
-    IEnumerable<Player> players;
+    private IEnumerable<Player> players;
+    private string searchTerm = "";
+    private string sortColumn = nameof(Player.BestWinTime);
+    private bool sortAscending = true;
 
     protected override void OnInitialized()
     {
-        players = Service.GetAllPlayers()
-            .OrderBy(p => p.BestWinTime)
-            .ThenByDescending(p => p.ConsecutiveWins)
-            .ToList();
+        players = Service.GetAllPlayers();
     }
 
-    void Voltar()
+    private IEnumerable<Player> DisplayedPlayers => GetDisplayedPlayers();
+
+    private IEnumerable<Player> GetDisplayedPlayers()
     {
-        Nav.NavigateTo($"/lobby");
+        var query = string.IsNullOrWhiteSpace(searchTerm)
+            ? players
+            : players.Where(p => p.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+
+        query = sortColumn switch
+        {
+            nameof(Player.Name) => sortAscending
+                ? query.OrderBy(p => p.Name)
+                : query.OrderByDescending(p => p.Name),
+            nameof(Player.BestWinTime) => sortAscending
+                ? query.OrderBy(p => p.BestWinTime)
+                : query.OrderByDescending(p => p.BestWinTime),
+            nameof(Player.ConsecutiveWins) => sortAscending
+                ? query.OrderBy(p => p.ConsecutiveWins)
+                : query.OrderByDescending(p => p.ConsecutiveWins),
+            nameof(Player.TotalWins) => sortAscending
+                ? query.OrderBy(p => p.TotalWins)
+                : query.OrderByDescending(p => p.TotalWins),
+            _ => query
+        };
+
+        return query;
     }
+
+    private void SortBy(string column)
+    {
+        if (sortColumn == column)
+            sortAscending = !sortAscending;
+        else
+        {
+            sortColumn = column;
+            sortAscending = true;
+        }
+    }
+
+    private RenderFragment SortIndicator(string column) => builder =>
+    {
+        if (sortColumn == column)
+        {
+            var arrow = sortAscending ? "▲" : "▼";
+            builder.AddContent(0, arrow);
+        }
+    };
+
+    void Voltar() => Nav.NavigateTo("/lobby");
 }
