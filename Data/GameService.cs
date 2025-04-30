@@ -99,42 +99,128 @@ namespace TicTacToe.Data
                             {
                                 g.CurrentTurn = g.CurrentTurn == 'X' ? 'O' : 'X';
                             }
+
+                            NotifyStateChanged();
+
                             if (!g.IsFinished && g.VsCPU && g.CurrentTurn == 'O' && g.PlayerO == "CPU")
                             {
                                 DoAIMove(g);
                             }
-                            NotifyStateChanged();
                         }
                     }
                 }
             }
         }
+
         void DoAIMove(GameEntity g)
         {
-            var empty = g.Board.Select((val, idx) => new { val, idx }).Where(x => x.val == ' ').Select(x => x.idx).ToList();
-            if (empty.Count > 0)
+            int move = g.AIDifficulty switch
             {
-                var choice = new System.Random().Next(empty.Count);
-                g.Board[empty[choice]] = 'O';
+                Difficulty.Easy => GetRandomMove(g.Board),
+                Difficulty.Medium => GetWinningOrRandomMove(g.Board, 'O', 'X'),
+                Difficulty.Hard => GetBestMove(g.Board),
+                _ => GetRandomMove(g.Board)
+            };
+
+            if (move != -1)
+            {
+                g.Board[move] = 'O';
                 if (CheckWin(g.Board, 'O'))
                 {
                     g.IsFinished = true;
                     g.Winner = "CPU";
-                    g.EndTime = System.DateTime.Now;
+                    g.EndTime = DateTime.Now;
                     if (Players.TryGetValue(g.PlayerX, out var user)) user.ConsecutiveWins = 0;
                 }
                 else if (g.Board.All(c => c != ' '))
                 {
                     g.IsFinished = true;
-                    g.EndTime = System.DateTime.Now;
+                    g.EndTime = DateTime.Now;
                     if (Players.TryGetValue(g.PlayerX, out var user)) user.ConsecutiveWins = 0;
                 }
                 else
                 {
                     g.CurrentTurn = 'X';
                 }
+                NotifyStateChanged();
             }
         }
+
+        int GetRandomMove(char[] board)
+        {
+            var empty = board.Select((val, idx) => new { val, idx }).Where(x => x.val == ' ').Select(x => x.idx).ToList();
+            return empty.Count > 0 ? empty[new Random().Next(empty.Count)] : -1;
+        }
+
+        int GetWinningOrRandomMove(char[] board, char ai, char opponent)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if (board[i] == ' ')
+                {
+                    board[i] = ai;
+                    if (CheckWin(board, ai)) { board[i] = ' '; return i; }
+                    board[i] = ' ';
+                }
+            }
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (board[i] == ' ')
+                {
+                    board[i] = opponent;
+                    if (CheckWin(board, opponent)) { board[i] = ' '; return i; }
+                    board[i] = ' ';
+                }
+            }
+            return GetRandomMove(board);
+        }
+
+        int GetBestMove(char[] board)
+        {
+            int bestScore = int.MinValue;
+            int move = -1;
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (board[i] == ' ')
+                {
+                    board[i] = 'O';
+                    int score = Minimax(board, 0, false);
+                    board[i] = ' ';
+                    if (score > bestScore)
+                    {
+                        bestScore = score;
+                        move = i;
+                    }
+                }
+            }
+            return move;
+        }
+
+        int Minimax(char[] board, int depth, bool isMaximizing)
+        {
+            if (CheckWin(board, 'O')) return 10 - depth;
+            if (CheckWin(board, 'X')) return depth - 10;
+            if (board.All(c => c != ' ')) return 0;
+
+            int bestScore = isMaximizing ? int.MinValue : int.MaxValue;
+            char player = isMaximizing ? 'O' : 'X';
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (board[i] == ' ')
+                {
+                    board[i] = player;
+                    int score = Minimax(board, depth + 1, !isMaximizing);
+                    board[i] = ' ';
+                    bestScore = isMaximizing ? Math.Max(score, bestScore) : Math.Min(score, bestScore);
+                }
+            }
+
+            return bestScore;
+        }
+
         bool CheckWin(char[] b, char t)
         {
             int[][] w = new int[][]{

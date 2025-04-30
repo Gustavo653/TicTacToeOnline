@@ -7,7 +7,7 @@
 <div>
     <h2>Lobby</h2>
     <button @onclick="CriarJogo">Criar Jogo</button>
-    <button @onclick="CriarJogoVsIA">Criar Jogo vs IA</button>
+    <button @onclick="CriarJogoVsCPU">Criar Jogo vs CPU</button>
 
     <div class="lobby-games">
         @foreach (var g in openGames)
@@ -43,7 +43,7 @@
         Nav.NavigateTo($"/game/{g.Id}/{UserName}");
     }
 
-    void CriarJogoVsIA()
+    void CriarJogoVsCPU()
     {
         Nav.NavigateTo($"/difficulty/{UserName}");
     }
