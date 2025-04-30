@@ -25,24 +25,35 @@
     [Parameter] public string CssClass { get; set; } = "nav-menu";
     private bool IsLoggedIn { get; set; } = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        Service.StateChanged += async () =>
+        Service.StateChanged += OnServiceStateChanged;
+    }
+
+    private void OnServiceStateChanged()
+    {
+        InvokeAsync(async () =>
         {
-            var username = await JS.InvokeAsync<string>("localStorage.getItem", "username");
-            IsLoggedIn = !string.IsNullOrEmpty(username);
-            StateHasChanged();
-        };
+            await CheckUserName();
+        });
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            var username = await JS.InvokeAsync<string>("localStorage.getItem", "username");
-            IsLoggedIn = !string.IsNullOrEmpty(username);
-            StateHasChanged();
+            await InvokeAsync(async () =>
+            {
+                await CheckUserName();
+            });
         }
+    }
+
+    private async Task CheckUserName()
+    {
+        var username = await JS.InvokeAsync<string>("localStorage.getItem", "username");
+        IsLoggedIn = !string.IsNullOrEmpty(username);
+        StateHasChanged();
     }
 
     private async Task Logout()
