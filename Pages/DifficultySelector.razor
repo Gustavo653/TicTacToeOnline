@@ -4,15 +4,59 @@
 @inject GameService GameService
 @inject IJSRuntime JS
 
-<h3>Jogar contra a CPU</h3>
+<div class="difficulty-container">
+    <h3>Jogar contra a CPU</h3>
 
-<select @bind="selectedDifficulty">
-    <option value="Easy">Fácil</option>
-    <option value="Medium">Médio</option>
-    <option value="Hard">Difícil</option>
-</select>
+    <label for="difficulty">Escolha a dificuldade:</label>
+    <select id="difficulty" @bind="selectedDifficulty">
+        <option value="Easy">Fácil</option>
+        <option value="Medium">Médio</option>
+        <option value="Hard">Difícil</option>
+    </select>
 
-<button @onclick="CriarJogoVsCPU">Iniciar Jogo</button>
+    <button class="start-button" @onclick="CriarJogoVsCPU">Iniciar Jogo</button>
+</div>
+
+<style>
+    .difficulty-container {
+        max-width: 400px;
+        margin: 60px auto;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        background-color: #f9f9f9;
+        text-align: center;
+    }
+
+        .difficulty-container h3 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .start-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .start-button:hover {
+            background-color: #0056b3;
+        }
+</style>
 
 @code {
     private Difficulty selectedDifficulty = Difficulty.Easy;
