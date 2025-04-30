@@ -8,13 +8,14 @@
     string userName = "";
     string error = "";
 
-    private async Task Login()
+    private async Task Register()
     {
         if (!string.IsNullOrWhiteSpace(userName))
         {
             if (Service.RegisterPlayer(userName))
             {
                 await JS.InvokeVoidAsync("localStorage.setItem", "username", userName);
+                Service.NotifyStateChanged();
                 Nav.NavigateTo($"/lobby");
             }
             else
@@ -26,6 +27,6 @@
 <div class="login-container">
     <h1>TicTacToe</h1>
     <input placeholder="Seu nome" @bind="userName" />
-    <button @onclick="Login">Entrar</button>
+    <button @onclick="Register">Entrar</button>
     <div>@error</div>
 </div>

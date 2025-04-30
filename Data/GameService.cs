@@ -6,7 +6,7 @@ namespace TicTacToe.Data
         static ConcurrentDictionary<string, Player> Players = new ConcurrentDictionary<string, Player>();
         static ConcurrentDictionary<string, GameEntity> Games = new ConcurrentDictionary<string, GameEntity>();
         public event Action StateChanged;
-        void NotifyStateChanged() => StateChanged?.Invoke();
+        public void NotifyStateChanged() => StateChanged?.Invoke();
         public bool RegisterPlayer(string name)
         {
             var added = Players.TryAdd(name, new Player { Name = name, ConsecutiveWins = 0, TotalWins = 0, BestWinTime = long.MaxValue });
@@ -38,6 +38,7 @@ namespace TicTacToe.Data
             NotifyStateChanged();
             return g;
         }
+
 
         public GameEntity JoinGame(string gameId, string playerName)
         {
