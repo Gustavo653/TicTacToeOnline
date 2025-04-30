@@ -10,7 +10,6 @@ namespace TicTacToe.Data
         public bool RegisterPlayer(string name)
         {
             var added = Players.TryAdd(name, new Player { Name = name, ConsecutiveWins = 0, TotalWins = 0, BestWinTime = long.MaxValue });
-            if (added) NotifyStateChanged();
             return added;
         }
         public Player GetPlayer(string name)

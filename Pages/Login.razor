@@ -8,6 +8,12 @@
     string userName = "";
     string error = "";
 
+    protected override async Task OnInitializedAsync()
+    {
+        userName = await JS.InvokeAsync<string>("localStorage.getItem", "username");
+        await Register();
+    }
+
     private async Task Register()
     {
         if (!string.IsNullOrWhiteSpace(userName))
@@ -16,6 +22,7 @@
             {
                 await JS.InvokeVoidAsync("localStorage.setItem", "username", userName);
                 Service.NotifyStateChanged();
+                await Task.Delay(50);
                 Nav.NavigateTo($"/lobby");
             }
             else
