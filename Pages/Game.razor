@@ -1,7 +1,8 @@
-﻿@page "/game/{GameId}/{UserName}"
+﻿@page "/game/{GameId}"
 @implements IDisposable
 @inject GameService Service
 @inject NavigationManager Nav
+@inject IJSRuntime JS
 @using TicTacToe.Data
 
 <h2>Partida - Sala @GameId</h2>
@@ -30,14 +31,13 @@
 
 @code {
     [Parameter] public string GameId { get; set; }
-    [Parameter] public string UserName { get; set; }
     GameEntity currentGame;
-    string usuario;
+    string userName;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         currentGame = Service.GetGame(GameId);
-        usuario = UserName;
+        userName = await JS.InvokeAsync<string>("localStorage.getItem", "username");
         Service.StateChanged += OnServiceStateChanged;
     }
 
@@ -49,14 +49,14 @@
 
     void Move(int i)
     {
-        Service.MakeMove(GameId, i, usuario);
+        Service.MakeMove(GameId, i, userName);
     }
 
     bool MyTurn()
     {
         if (currentGame == null || currentGame.IsFinished) return false;
-        if (currentGame.CurrentTurn == 'X' && currentGame.PlayerX == usuario) return true;
-        if (currentGame.CurrentTurn == 'O' && currentGame.PlayerO == usuario) return true;
+        if (currentGame.CurrentTurn == 'X' && currentGame.PlayerX == userName) return true;
+        if (currentGame.CurrentTurn == 'O' && currentGame.PlayerO == userName) return true;
         return false;
     }
 
@@ -70,7 +70,7 @@
 
     void Voltar()
     {
-        Nav.NavigateTo($"/lobby/{UserName}");
+        Nav.NavigateTo($"/lobby");
     }
 
     public void Dispose()

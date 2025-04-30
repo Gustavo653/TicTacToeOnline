@@ -1,7 +1,8 @@
 ﻿@using TicTacToe.Data
-@page "/difficulty/{UserName}"
+@page "/difficulty"
 @inject NavigationManager Nav
 @inject GameService GameService
+@inject IJSRuntime JS
 
 <h3>Jogar contra a CPU</h3>
 
@@ -14,12 +15,12 @@
 <button @onclick="CriarJogoVsCPU">Iniciar Jogo</button>
 
 @code {
-    [Parameter] public string UserName { get; set; }
     private Difficulty selectedDifficulty = Difficulty.Easy;
 
-    private void CriarJogoVsCPU()
+    private async Task CriarJogoVsCPU()
     {
-        var game = GameService.CreateGame(UserName, true, selectedDifficulty);
-        Nav.NavigateTo($"/game/{game.Id}/{UserName}");
+        var userName = await JS.InvokeAsync<string>("localStorage.getItem", "username");
+        var game = GameService.CreateGame(userName, true, selectedDifficulty);
+        Nav.NavigateTo($"/game/{game.Id}");
     }
 }

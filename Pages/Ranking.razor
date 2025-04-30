@@ -1,4 +1,4 @@
-﻿@page "/ranking/{UserName}"
+﻿@page "/ranking"
 @using TicTacToe.Data
 @inject GameService Service
 @inject NavigationManager Nav
@@ -30,8 +30,7 @@
 <button class="back-button" @onclick="Voltar">Voltar</button>
 
 @code {
-    [Parameter] public string UserName { get; set; }
-    System.Collections.Generic.IEnumerable<Player> players;
+    IEnumerable<Player> players;
 
     protected override void OnInitialized()
     {
@@ -43,6 +42,6 @@
 
     void Voltar()
     {
-        Nav.NavigateTo($"/lobby/{UserName}");
+        Nav.NavigateTo($"/lobby");
     }
 }

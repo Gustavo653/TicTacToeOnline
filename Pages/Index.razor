@@ -2,17 +2,21 @@
 @using TicTacToe.Data
 @inject NavigationManager Nav
 @inject GameService Service
+@inject IJSRuntime JS
 
 @code {
     string userName = "";
     string error = "";
 
-    void Login()
+    private async Task Login()
     {
         if (!string.IsNullOrWhiteSpace(userName))
         {
             if (Service.RegisterPlayer(userName))
-                Nav.NavigateTo($"/lobby/{userName}");
+            {
+                await JS.InvokeVoidAsync("localStorage.setItem", "username", userName);
+                Nav.NavigateTo($"/lobby");
+            }
             else
                 error = "Nome já existe";
         }

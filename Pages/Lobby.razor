@@ -1,8 +1,9 @@
-﻿@page "/lobby/{UserName}"
+﻿@page "/lobby"
 @using TicTacToe.Data
 @implements IDisposable
 @inject NavigationManager Nav
 @inject GameService Service
+@inject IJSRuntime JS
 
 <div>
     <h2>Lobby</h2>
@@ -22,12 +23,19 @@
 </div>
 
 @code {
-    [Parameter] public string UserName { get; set; }
+    private string userName;
     System.Collections.Generic.IEnumerable<GameEntity> openGames;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         openGames = Service.GetOpenGames().ToList();
+        userName = await JS.InvokeAsync<string>("localStorage.getItem", "username");
+
+        if (string.IsNullOrEmpty(userName))
+        {
+            Nav.NavigateTo("/");
+        }
+
         Service.StateChanged += OnServiceStateChanged;
     }
 
@@ -39,19 +47,19 @@
 
     void CriarJogo()
     {
-        var g = Service.CreateGame(UserName, false);
-        Nav.NavigateTo($"/game/{g.Id}/{UserName}");
+        var g = Service.CreateGame(userName, false);
+        Nav.NavigateTo($"/game/{g.Id}");
     }
 
     void CriarJogoVsCPU()
     {
-        Nav.NavigateTo($"/difficulty/{UserName}");
+        Nav.NavigateTo($"/difficulty");
     }
 
     void EntrarJogo(string id)
     {
-        Service.JoinGame(id, UserName);
-        Nav.NavigateTo($"/game/{id}/{UserName}");
+        Service.JoinGame(id, userName);
+        Nav.NavigateTo($"/game/{id}");
     }
 
     public void Dispose()

@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
 @inject NavigationManager Nav
+@inject IJSRuntime JS
 
 <div class="@CssClass">
     <ul>
@@ -21,8 +22,9 @@
 @code {
     [Parameter] public string CssClass { get; set; } = "nav-menu";
 
-    void Logout()
+    private async Task Logout()
     {
+        await JS.InvokeVoidAsync("localStorage.removeItem", "username");
         Nav.NavigateTo("/");
     }
 }
