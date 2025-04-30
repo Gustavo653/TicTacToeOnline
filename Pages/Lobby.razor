@@ -13,7 +13,8 @@
         @foreach (var g in openGames)
         {
             <div class="lobby-game">
-                <div><strong>ID:</strong> @g.Id</div>
+                <p><strong>Sala:</strong> @g.Id</p>
+                <p><strong>Criador:</strong> @g.PlayerX</p>
                 <button @onclick="@(() => EntrarJogo(g.Id))">Entrar</button>
             </div>
         }
@@ -44,8 +45,7 @@
 
     void CriarJogoVsIA()
     {
-        var g = Service.CreateGame(UserName, true);
-        Nav.NavigateTo($"/game/{g.Id}/{UserName}");
+        Nav.NavigateTo($"/difficulty/{UserName}");
     }
 
     void EntrarJogo(string id)

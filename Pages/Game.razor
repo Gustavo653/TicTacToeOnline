@@ -4,7 +4,10 @@
 @inject NavigationManager Nav
 @using TicTacToe.Data
 
-<h3>Jogo @GameId</h3>
+<h2>Partida - Sala @GameId</h2>
+<p>Jogador X: @currentGame.PlayerX</p>
+<p>Jogador O: @currentGame.PlayerO</p>
+<p>É a vez de: @currentGame.CurrentTurn</p>
 
 @if (currentGame != null)
 {

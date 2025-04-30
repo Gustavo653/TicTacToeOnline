@@ -12,9 +12,12 @@
         public System.DateTime EndTime { get; set; }
         public char CurrentTurn { get; set; } = 'X';
         public bool VsCPU { get; set; }
+        public Difficulty AIDifficulty { get; set; } = Difficulty.Easy;
+
         public GameEntity()
         {
             for (int i = 0; i < 9; i++) Board[i] = ' ';
         }
     }
+    public enum Difficulty { Easy, Medium, Hard }
 }

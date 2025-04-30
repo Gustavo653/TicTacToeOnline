@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using TicTacToe.Pages;
 namespace TicTacToe.Data
 {
     public class GameService
@@ -19,18 +18,27 @@ namespace TicTacToe.Data
             Players.TryGetValue(name, out var p);
             return p;
         }
-        public System.Collections.Generic.IEnumerable<Player> GetAllPlayers()
+        public IEnumerable<Player> GetAllPlayers()
         {
             return Players.Values;
         }
-        public GameEntity CreateGame(string creator, bool vsCpu = false)
+
+        public GameEntity CreateGame(string creator, bool vsCpu = false, Difficulty difficulty = Difficulty.Easy)
         {
-            var g = new GameEntity { Id = System.Guid.NewGuid().ToString(), PlayerX = creator, StartTime = System.DateTime.Now, VsCPU = vsCpu };
+            var g = new GameEntity
+            {
+                Id = Guid.NewGuid().ToString(),
+                PlayerX = creator,
+                StartTime = DateTime.Now,
+                VsCPU = vsCpu,
+                AIDifficulty = difficulty
+            };
             if (vsCpu) g.PlayerO = "CPU";
             Games.TryAdd(g.Id, g);
             NotifyStateChanged();
             return g;
         }
+
         public GameEntity JoinGame(string gameId, string playerName)
         {
             if (Games.TryGetValue(gameId, out var g))
@@ -68,7 +76,7 @@ namespace TicTacToe.Data
                             {
                                 g.IsFinished = true;
                                 g.Winner = playerName;
-                                g.EndTime = System.DateTime.Now;
+                                g.EndTime = DateTime.Now;
                                 var t = (long)(g.EndTime - g.StartTime).TotalSeconds;
                                 if (Players.TryGetValue(playerName, out var winner))
                                 {
@@ -82,7 +90,7 @@ namespace TicTacToe.Data
                             else if (g.Board.All(c => c != ' '))
                             {
                                 g.IsFinished = true;
-                                g.EndTime = System.DateTime.Now;
+                                g.EndTime = DateTime.Now;
                                 var other = g.CurrentTurn == 'X' ? g.PlayerO : g.PlayerX;
                                 if (Players.TryGetValue(other, out var p1)) p1.ConsecutiveWins = 0;
                                 if (Players.TryGetValue(playerName, out var p2)) p2.ConsecutiveWins = 0;
@@ -91,11 +99,11 @@ namespace TicTacToe.Data
                             {
                                 g.CurrentTurn = g.CurrentTurn == 'X' ? 'O' : 'X';
                             }
-                            NotifyStateChanged();
                             if (!g.IsFinished && g.VsCPU && g.CurrentTurn == 'O' && g.PlayerO == "CPU")
                             {
                                 DoAIMove(g);
                             }
+                            NotifyStateChanged();
                         }
                     }
                 }
@@ -125,7 +133,6 @@ namespace TicTacToe.Data
                 {
                     g.CurrentTurn = 'X';
                 }
-                NotifyStateChanged();
             }
         }
         bool CheckWin(char[] b, char t)

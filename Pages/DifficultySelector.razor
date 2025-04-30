@@ -1,0 +1,25 @@
+﻿@using TicTacToe.Data
+@page "/difficulty/{UserName}"
+@inject NavigationManager Nav
+@inject GameService GameService
+
+<h3>Jogar contra a IA</h3>
+
+<select @bind="selectedDifficulty">
+    <option value="Easy">Fácil</option>
+    <option value="Medium">Médio</option>
+    <option value="Hard">Difícil</option>
+</select>
+
+<button @onclick="CriarJogoVsIA">Iniciar Jogo</button>
+
+@code {
+    [Parameter] public string UserName { get; set; }
+    private Difficulty selectedDifficulty = Difficulty.Easy;
+
+    private void CriarJogoVsIA()
+    {
+        var game = GameService.CreateGame(UserName, true, selectedDifficulty);
+        Nav.NavigateTo($"/game/{game.Id}/{UserName}");
+    }
+}
