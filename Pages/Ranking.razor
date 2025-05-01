@@ -56,6 +56,7 @@
     .ranking-table-container {
         margin-bottom: 1.5rem;
         padding: 1rem;
+        overflow-x: auto;
     }
 
     .search-input {
@@ -69,6 +70,7 @@
 
     .ranking-table {
         width: 100%;
+        min-width: 600px;
         border-collapse: separate;
         border-spacing: 0 0.5rem;
     }
@@ -77,12 +79,14 @@
             background: var(--secondary-color);
             color: #fff;
             text-transform: uppercase;
+            font-size: 0.9rem;
         }
 
         .ranking-table th,
         .ranking-table td {
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 0.75rem;
             text-align: center;
+            font-size: 0.9rem;
         }
 
         .ranking-table tbody tr {
@@ -102,6 +106,22 @@
     .back-button {
         margin-top: 1rem;
         padding: 0.5rem 1rem;
+    }
+
+    @@media (max-width: 600px) {
+        .ranking-header {
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .search-input {
+            max-width: 100%;
+        }
+
+        .ranking-table th, .ranking-table td {
+            font-size: 0.75rem;
+            padding: 0.4rem;
+        }
     }
 </style>
 
