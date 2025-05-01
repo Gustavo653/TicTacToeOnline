@@ -3,8 +3,18 @@ namespace TicTacToe.Data
 {
     public class GameService
     {
-        static ConcurrentDictionary<string, Player> Players = new ConcurrentDictionary<string, Player>();
-        static ConcurrentDictionary<string, GameEntity> Games = new ConcurrentDictionary<string, GameEntity>();
+        static ConcurrentDictionary<string, Player> Players = new();
+        static ConcurrentDictionary<string, GameEntity> Games = new();
+
+        public GameService()
+        {
+            Players.TryAdd("José", new Player { Name = "José", ConsecutiveWins = 2, TotalWins = 5, BestWinTime = 30 });
+            Players.TryAdd("Maria", new Player { Name = "Maria", ConsecutiveWins = 4, TotalWins = 10, BestWinTime = 25 });
+            Players.TryAdd("Elton", new Player { Name = "Elton", ConsecutiveWins = 1, TotalWins = 3, BestWinTime = 40 });
+            Players.TryAdd("Andrea", new Player { Name = "Andrea", ConsecutiveWins = 3, TotalWins = 7, BestWinTime = 28 });
+            Players.TryAdd("Carlos", new Player { Name = "Carlos", ConsecutiveWins = 5, TotalWins = 12, BestWinTime = 22 });
+        }
+
         public event Action StateChanged;
         public void NotifyStateChanged() => StateChanged?.Invoke();
         public bool RegisterPlayer(string name)
