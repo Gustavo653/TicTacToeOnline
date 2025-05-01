@@ -29,6 +29,32 @@
     }
 }
 
+<style>
+    .game-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .board {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        max-width: 360px;
+        margin: 0 auto 24px;
+    }
+
+        .board button {
+            width: 100%;
+            aspect-ratio: 1;
+            font-size: 2rem;
+            cursor: pointer;
+            border: 2px solid black;
+            background: var(--secondary-color);
+            border-radius: 8px;
+        }</style>
+
 @code {
     [Parameter] public string GameId { get; set; }
     GameEntity currentGame;

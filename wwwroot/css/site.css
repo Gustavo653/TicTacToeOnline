@@ -9,30 +9,6 @@
     --btn-hover: #2573A6;
 }
 
-header {
-    background: var(--primary-color);
-    color: white;
-    padding: 16px 32px;
-    font-size: 2rem;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    letter-spacing: 1px;
-}
-
-.card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    padding: 16px;
-    transition: transform 0.2s ease;
-}
-
-    .card:hover {
-        transform: translateY(-4px);
-    }
-
-
 * {
     margin: 0;
     padding: 0;
@@ -45,79 +21,10 @@ body {
     color: var(--text-color);
 }
 
-.layout-container {
-    display: flex;
-    min-height: 100vh;
-}
-
-.menu-toggle {
-    display: none;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    font-size: 1.5rem;
-    background: var(--secondary-color);
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    z-index: 999;
-}
-
 .content {
     flex: 1;
     padding: 24px;
 }
-
-.game-container,
-.lobby-container,
-.ranking-container {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.game-header,
-.lobby-header,
-.ranking-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.board {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    max-width: 360px;
-    margin: 0 auto 24px;
-}
-
-    .board button {
-        width: 100%;
-        aspect-ratio: 1;
-        font-size: 2rem;
-        cursor: pointer;
-        border: 2px solid black;
-        background: var(--secondary-color);
-        border-radius: 8px;
-    }
-
-.exit-button {
-    background: var(--accent-red);
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-    .exit-button:hover {
-        background: var(--accent-red-dark);
-    }
 
 button {
     background: var(--secondary-color);
@@ -133,71 +40,3 @@ button {
     button:hover {
         background: var(--btn-hover);
     }
-
-.login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 80px;
-}
-
-    .login-container h1 {
-        margin-bottom: 24px;
-        font-size: 2.5rem;
-        color: var(--primary-color);
-    }
-
-    .login-container input {
-        padding: 10px;
-        margin-bottom: 12px;
-        font-size: 1rem;
-        width: 240px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-.lobby-games {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 16px;
-}
-
-.lobby-game {
-    background: #fff;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    flex: 1 1 calc(50% - 12px);
-}
-
-    .lobby-game button {
-        margin-top: 8px;
-    }
-
-@media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
-    }
-
-    .nav-menu {
-        position: fixed;
-        top: 0;
-        left: -var(--sidebar-width);
-        height: 100%;
-        transition: left 0.3s ease;
-        z-index: 998;
-    }
-
-        .nav-menu.open {
-            left: 0;
-        }
-
-    .content {
-        padding: 16px;
-    }
-
-    .lobby-game {
-        flex: 1 1 100%;
-    }
-}

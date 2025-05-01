@@ -22,6 +22,27 @@
     </div>
 </div>
 
+<style>
+    .lobby-games {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+    }
+
+    .lobby-game {
+        background: #fff;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        flex: 1 1 calc(50% - 12px);
+    }
+
+        .lobby-game button {
+            margin-top: 8px;
+        }
+</style>
+
 @code {
     private string userName;
     System.Collections.Generic.IEnumerable<GameEntity> openGames;

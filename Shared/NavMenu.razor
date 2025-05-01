@@ -25,29 +25,23 @@
 
 <style>
     .menu-toggle {
-        background: var(--primary-color);
-        color: #fff;
-        border: none;
-        padding: 10px 15px;
-        font-size: 24px;
-        cursor: pointer;
+        display: block;
         position: fixed;
         top: 10px;
         left: 10px;
+        font-size: 1.5rem;
+        background: var(--secondary-color);
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
         z-index: 999;
-        display: none;
     }
 
         .menu-toggle.hidden {
             display: none !important;
         }
-
-   @@media (max-width: 768px) {
-        .menu-toggle
-
-    {
-        display: block;
-    }
 
     .nav-menu {
         width: 250px;
@@ -59,8 +53,6 @@
         padding: 70px 10px 20px;
         z-index: 998;
         overflow-y: auto;
-    }
-
     }
 
     .nav-menu {
@@ -95,7 +87,6 @@
             .nav-menu a:hover,
             .nav-menu button:hover {
                 background: var(--secondary-color);
-            }
 </style>
 
 @code {
