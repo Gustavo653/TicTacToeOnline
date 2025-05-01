@@ -4,14 +4,11 @@
 <PageTitle>TicTacToe</PageTitle>
 
 <header>
-    <button class="menu-toggle" @onclick="ToggleMenu">☰</button>
-    <p>
-        🎮 TicTacToe - O Jogo da Velha Online
-    </p>
+    <NavMenu CssClass="@menuClass" />
+    🎮 TicTacToe - O Jogo da Velha Online
 </header>
 
 <div class="layout-container">
-    <NavMenu CssClass="@menuClass" />
     <div class="content">
         @Body
     </div>

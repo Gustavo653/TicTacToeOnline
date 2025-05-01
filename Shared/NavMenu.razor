@@ -4,10 +4,14 @@
 @inject IJSRuntime JS
 @inject GameService Service
 
-<button class="menu-toggle @(IsMenuOpen ? "hidden" : "")" @onclick="ToggleMenu">☰</button>
+@if (IsLoggedIn)
+{
+    <button class="menu-toggle" @onclick="ToggleMenu">☰</button>
+}
 
 @if (IsLoggedIn && IsMenuOpen)
 {
+    <div class="menu-overlay" @onclick="FecharMenu"></div>
     <div class="@CssClass">
         <ul>
             <li>
@@ -17,7 +21,7 @@
                 <NavLink href="/ranking" @onclick="FecharMenu">Ranking</NavLink>
             </li>
             <li>
-                <button @onclick="Logout">Sair</button>
+                <NavLink @onclick="Logout">Sair</NavLink>
             </li>
         </ul>
     </div>
@@ -36,12 +40,8 @@
         padding: 8px 12px;
         border-radius: 4px;
         cursor: pointer;
-        z-index: 999;
+        z-index: 1001;
     }
-
-        .menu-toggle.hidden {
-            display: none !important;
-        }
 
     .nav-menu {
         width: 250px;
@@ -51,11 +51,8 @@
         height: 100%;
         background: var(--primary-color);
         padding: 70px 10px 20px;
-        z-index: 998;
+        z-index: 1002;
         overflow-y: auto;
-    }
-
-    .nav-menu {
         color: #fff;
     }
 
@@ -87,6 +84,17 @@
             .nav-menu a:hover,
             .nav-menu button:hover {
                 background: var(--secondary-color);
+            }
+
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+    }
 </style>
 
 @code {
